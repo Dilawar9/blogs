@@ -26,41 +26,61 @@ app.get('/', (req, res) => {
 })
 
 // user signup
-app.post("/signup", async (req, res) => {
+app.post("/signup", upload.single('image'), async (req, res) => {
     const { username, email, password } = req.body;
     try {
 
+        const extension = req.file.mimetype.split("/")[1];
+        if (extension == "png" || extension == "jpg" || extension == "jpeg") {
+            const fileNmae = req.file.filename + "." + extension;
+            
+            // new key in body object
+            req.body.image = fileNmae;
+      
+            fs.rename(req.file.path, `uploads/${fileNmae}`, () => {
+                console.log("\nFile Renamed!\n");
+            });
+        } else {
+            fs.unlink(req.file.path, () => console.log("file deleted"))
+            return res.json({
+                message: "only images are accepted"
+            })
+        }
+
         // check email is already registered or not
-        const alreadyUser = await Usermodule.findOne({ email: email });
-        if (alreadyUser !== null) {
+
+        const already = await Usermodule.findOne({email:email });
+        // console.log(already);
+        if (already !== null) {
             return res.json({
                 status: "failed",
                 message: "Already registered"
             })
         }
-
         // encrypt password
+
         const hashed = await bcrypt.hash(password, 10);
 
-
+         
         // create new user
-        const newUser = await Usermodule.create({
-            username: username,
-            email: email,
-            password: hashed
-        });
-
+        
+        const user = await Usermodule.create({
+            username:username,
+            email:email,
+            password:hashed,
+            image:req.body.image,
+        })
+          
         // generate jwt token
-        const token = jwt.sign({ id: newUser._id }, secretKey);
+        const token = jwt.sign({id:user._id}, secretKey);
 
         return res.status(200).json({
             status: "success",
             message: "Signup successfully",
-            token: token
+            token: token,
         })
-
     } catch (error) {
-        return res.status(409).json({
+      return res.status(409).json({
             status: "failed",
             message: "Something went wrong"
         })
@@ -71,35 +91,40 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
+
     try {
         // first check user is exist or not and if exists then take it out
-        const alreadyuser = await Usermodule.findOne({ email: email })
-
-        if (alreadyuser === null) {
-            res.json({
+        const checkuser = await Usermodule.findOne({ email: email })
+        
+       
+        if (checkuser === null) {
+             res.json({
                 status: "faild",
                 message: "authentication faild"
             })
         };
 
         // if user is registered, then check the password
-
-        const confirmPass = await bcrypt.compare(password, alreadyuser.password);
+        
+        const confirmPass= await bcrypt.compare(password,checkuser.password);
+     
+        
+        
         if (confirmPass === false) {
-            res.json({
+             res.json({
                 status: "faild",
                 message: "authentication faild"
             })
         }
         // okay, jswon token
 
-        const token = jwt.sign({ id: alreadyuser._id }, secretKey);
-
+        const token = jwt.sign({ id: checkuser._id }, secretKey);
+         
         // return respon
         res.json({
             status: "success",
             message: "logged in successfully",
-            token: token
+            token: token,
         })
 
     } catch (error) {
@@ -154,12 +179,12 @@ app.post("/post", upload.single('image'), async (req, res) => {
 // get All post
 
 app.get('/post', async (req, res) => {
-    
+
     try {
         const post = await Post.find({});
         return res.json({
             status: true,
-            post:post
+            post: post
         })
 
     } catch (error) {
@@ -218,12 +243,12 @@ app.post("/category", upload.single('image'), async (req, res) => {
 // get All category
 
 app.get('/category', async (req, res) => {
-    
+
     try {
         const category = await Category.find({});
         return res.json({
             status: true,
-            category:category
+            category: category
         })
 
     } catch (error) {
@@ -254,7 +279,7 @@ app.post("/comment", async (req, res) => {
             postid: postid,
             userid: userid,
             comment: comment,
-            status: status
+            status: status,
         });
         // comment responst
 
@@ -273,12 +298,12 @@ app.post("/comment", async (req, res) => {
 
 // get All comment
 app.get('/comment', async (req, res) => {
-    
+
     try {
         const comment = await Comment.find({});
         return res.json({
             status: true,
-            comment:comment
+            comment: comment
         })
 
     } catch (error) {
@@ -298,7 +323,7 @@ app.get('/comment', async (req, res) => {
 
 // server & DB connection
 mongoose.connect("mongodb://127.0.0.1:27017/blogs").then(() => {
-    app.listen(3001, () => {
+    app.listen(3002, () => {
         console.log("db connected and server is up now");
     })
 })
