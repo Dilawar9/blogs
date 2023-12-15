@@ -41,9 +41,8 @@ function Signup() {
 
     };
 
-
     return (
-        <div className='container w-50 mt-5 border p-5 '>
+        <div className='container w-50 mt-5 p-5  bg-light'>
             <div className='row'>
                 <div className='col-md-12'>
                     <form>

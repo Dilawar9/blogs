@@ -29,7 +29,7 @@ function Login() {
     return (
 
         <>
-            <div className='container border w-50 border  p-5 mt-5'>
+            <div className='container border w-25 border  p-5 mt-5 bg-light'>
                 <div className='row'>
                     <div className='col-md-12'>
                         <form>

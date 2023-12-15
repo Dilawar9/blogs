@@ -3,7 +3,7 @@ import React from 'react'
 
 function Home() {
     return (
-        <div className="container">
+        <div className="container m-5 p-5">
             <div className='row mt-5'>
                 <div className='col-md-3'>
                     <div className="card" >
