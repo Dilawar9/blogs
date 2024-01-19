@@ -60,10 +60,10 @@ function Signup() {
                             <label for="password" className="form-label">Password</label>
                             <input type="password" className="form-control" value={password} onChange={(e) => { setPassword(e.target.value) }} id="password" />
                         </div>
-                        <div className="mb-3">
+                        {/* <div className="mb-3">
                             <label for="image" className="form-label">image</label>
                             <input type="file" className="form-control" onChange={(e) => { setImage(e.target.files[0]) }} id="image" />
-                        </div>
+                        </div> */}
                         <button type="submit" className="btn btn-primary" onClick={submit}>Submit</button>
                     </form>
                 </div>

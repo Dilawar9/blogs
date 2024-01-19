@@ -322,6 +322,7 @@ app.get('/comment', async (req, res) => {
 
 
 // server & DB connection
+
 mongoose.connect("mongodb://127.0.0.1:27017/blogs").then(() => {
     app.listen(3002, () => {
         console.log("db connected and server is up now");

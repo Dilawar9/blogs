@@ -1,20 +1,20 @@
-var mongoose=require("mongoose");
+var mongoose = require("mongoose");
 
 
-var newshema=new mongoose.Schema({
-// autherId:
-title:String,
-body:String,
-category:String,
-image:String,
-status:{
-    type:String,
-    enum:["publish","draft"],
- 
-}
+var newshema = new mongoose.Schema({
+    // autherId:
+    title: String,
+    body: String,
+    category: String,
+    image: String,
+    status: {
+        type: String,
+        enum: ["publish", "draft"],
 
-},{timestamps:true})
+    }
+
+}, { timestamps: true })
 
 
-const Post=mongoose.model('post',newshema);
-module.exports=Post;
+const Post = mongoose.model('post', newshema);
+module.exports = Post;

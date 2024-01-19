@@ -6,10 +6,10 @@ var UserSchema = new mongoose.Schema({
     type: String
   },
   password: String,
-  image:String,
-  isAdmin:{
-    type:Boolean,
-    default:false
+  image: String,
+  isAdmin: {
+    type: Boolean,
+    default: false
   }
 },
   { timestamps: true });
