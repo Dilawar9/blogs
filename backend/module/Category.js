@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-var categoryschema = mongoose.Schema({
+var categoryschema = new mongoose.Schema({
     title: String,
     image: String,
 }, { timestamps: true })
