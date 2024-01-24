@@ -196,6 +196,30 @@ app.get('/post', async (req, res) => {
     }
 })
 
+// delete post by id
+
+app.delete('/post', async (req, res) => {
+    
+    const param=param.id;
+
+    try {
+        const post = await Post.find({id:param});
+        return res.json({
+            status: true,
+            post: post
+        })
+
+    } catch (error) {
+        res.json({
+            status: false,
+            message: "error.message"
+        })
+
+    }
+})
+
+
+
 // create category
 app.post("/category", upload.single('image'), async (req, res) => {
 
@@ -260,6 +284,26 @@ app.get('/category', async (req, res) => {
     }
 })
 
+// delete category by id
+
+app.delete('/category', async (req, res) => {
+    const param1=param.id;
+    try {
+        const category = await Category.find({id:param});
+        return res.json({
+            status: true,
+            category: category
+        })
+
+    } catch (error) {
+        res.json({
+            status: false,
+            message: "error.message"
+        })
+
+    }
+})
+
 // create comment
 app.post("/comment", async (req, res) => {
     const { postid, userid, comment, status } = req.body;
@@ -298,6 +342,26 @@ app.post("/comment", async (req, res) => {
 
 // get All comment
 app.get('/comment', async (req, res) => {
+
+    try {
+        const comment = await Comment.find({});
+        return res.json({
+            status: true,
+            comment: comment
+        })
+
+    } catch (error) {
+        res.json({
+            status: false,
+            message: "error.message"
+        })
+
+    }
+})
+
+// delete by id
+
+app.delete('/comment', async (req, res) => {
 
     try {
         const comment = await Comment.find({});
